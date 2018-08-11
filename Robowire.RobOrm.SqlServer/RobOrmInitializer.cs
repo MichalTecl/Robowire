@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 using Robowire.RobOrm.Core;
 using Robowire.RobOrm.Core.DefaultRules;
@@ -17,55 +13,54 @@ namespace Robowire.RobOrm.SqlServer
 {
     public static class RobOrmInitializer
     {
-        public static void Initialize(
-            IContainer container,
+        public static Action<IContainer> InitializeAndGetMigrator(
+            IContainerSetup s,
             Func<ISqlConnectionStringProvider> connectionStringProviderFactory,
-            bool applySchemaMigration,
             params Assembly[] entitiesOrigin)
         {
-            container.Setup(s => s.For<ISqlConnectionStringProvider>().Import.FromFactory(locator => connectionStringProviderFactory()));
+            s.For<ISqlConnectionStringProvider>().Import.FromFactory(locator => connectionStringProviderFactory());
 
-            container.Setup(c => c.For<IDataModelHelper>().Use<CachedDataModelHelper>());
-            container.Setup(c => c.For<ITransactionManager<SqlConnection>>().Use<ConnectionCreator>());
-            container.Setup(c => c.For<IDatabase>().Use<Database>());
-            container.Setup(c => c.For<ISchemaMigrator>().Use<SchemaMigrator>());
-            container.Setup(c => c.For<IEntityNamingConvention>().Use<DefaultEntityNamingConvention>());
+            s.For<IDataModelHelper>().Use<CachedDataModelHelper>();
+            s.For<ITransactionManager<SqlConnection>>().Use<ConnectionCreator>();
+            s.For<IDatabase>().Use<Database>();
+            s.For<ISchemaMigrator>().Use<SchemaMigrator>();
+            s.For<IEntityNamingConvention>().Use<DefaultEntityNamingConvention>();
 
             foreach (var assembly in entitiesOrigin)
             {
-                container.Setup(s => s.ScanAssembly(assembly));
+                s.ScanAssembly(assembly);
             }
 
-            if (!applySchemaMigration)
-            {
-                return;
-            }
-
-            var sqlScriptGenerator = new SqlMigrationScriptBuilder();
-            var hashBuilder = new MigrationHashBuilder();
-            var proxy = new ScriptBuilderProxy(hashBuilder, sqlScriptGenerator);
-
-            using (var locator = container.GetLocator())
-            {
-                var migrator = locator.Get<ISchemaMigrator>();
-                migrator.MigrateStructure(locator, proxy);
-
-                var hash = hashBuilder.GetHash();
-                var script = sqlScriptGenerator.ToString(hash);
-
-                var connectionBuilder = locator.Get<ITransactionManager<SqlConnection>>();
-
-                using (var connection = connectionBuilder.Open())
+            Action<IContainer> migratorFunc = (container) =>
                 {
-                    using (var command = new SqlCommand(script, connection.GetConnection()))
+                    var sqlScriptGenerator = new SqlMigrationScriptBuilder();
+                    var hashBuilder = new MigrationHashBuilder();
+                    var proxy = new ScriptBuilderProxy(hashBuilder, sqlScriptGenerator);
+
+                    using (var locator = container.GetLocator())
                     {
-                        command.ExecuteNonQuery();
+                        var migrator = locator.Get<ISchemaMigrator>();
+                        migrator.MigrateStructure(locator, proxy);
+
+                        var hash = hashBuilder.GetHash();
+                        var script = sqlScriptGenerator.ToString(hash);
+
+                        var connectionBuilder = locator.Get<ITransactionManager<SqlConnection>>();
+
+                        using (var connection = connectionBuilder.Open())
+                        {
+                            using (var command = new SqlCommand(script, connection.GetConnection()))
+                            {
+                                command.ExecuteNonQuery();
+                            }
+
+                            connection.Commit();
+                        }
+
                     }
+                };
 
-                    connection.Commit();
-                }
-
-            }
+            return migratorFunc;
         }
     }
 }

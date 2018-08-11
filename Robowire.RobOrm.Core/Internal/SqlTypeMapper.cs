@@ -33,15 +33,12 @@ namespace Robowire.RobOrm.Core.Internal
 
         public static string GetSqlTypeName(Type clrType, int length)
         {
-            clrType = Nullable.GetUnderlyingType(clrType) ?? clrType;
+            return GetSqlTypeName(clrType, length, true);
+        }
 
-            string sqlName;
-            if (!s_clrToSqlName.TryGetValue(clrType, out sqlName))
-            {
-                throw new InvalidOperationException($"There is no explicit conversion for type {clrType}");
-            }
-
-            return string.Format(sqlName, length);
+        public static bool GetSqlTypeMappingExists(Type clrType)
+        {
+            return GetSqlTypeName(clrType, 0) != null;
         }
 
         public static IDbTypeAttribute GetColumnType(PropertyInfo property)
@@ -57,6 +54,27 @@ namespace Robowire.RobOrm.Core.Internal
 
             return atr;
         }
+
+        private static string GetSqlTypeName(Type clrType, int length, bool throwIfNotFound)
+        {
+            clrType = Nullable.GetUnderlyingType(clrType) ?? clrType;
+
+            string sqlName;
+            if (!s_clrToSqlName.TryGetValue(clrType, out sqlName))
+            {
+                if (throwIfNotFound)
+                {
+                    throw new InvalidOperationException($"There is no explicit conversion for type {clrType}");
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return string.Format(sqlName, length);
+        }
+
     }
 
     internal sealed class DbType : IDbTypeAttribute

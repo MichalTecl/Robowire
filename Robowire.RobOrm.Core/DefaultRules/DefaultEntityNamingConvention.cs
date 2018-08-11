@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Reflection;
+
+using Robowire.RobOrm.Core.Internal;
 
 namespace Robowire.RobOrm.Core.DefaultRules
 {
@@ -18,11 +21,6 @@ namespace Robowire.RobOrm.Core.DefaultRules
 
         public bool IsColumn(PropertyInfo property)
         {
-            //if (!property.CanRead || !property.CanWrite)
-            //{
-            //    return false;
-            //}
-
             var propType = property.PropertyType;
 
             var nType = Nullable.GetUnderlyingType(propType);
@@ -31,7 +29,17 @@ namespace Robowire.RobOrm.Core.DefaultRules
                 propType = nType;
             }
 
-            return propType.IsPrimitive || typeof(string).IsAssignableFrom(propType);
+            if (propType.IsInterface || propType.IsAbstract)
+            {
+                return false;
+            }
+
+            if (property.GetCustomAttributes().OfType<IDbTypeAttribute>().Any())
+            {
+                return true;
+            }
+
+            return SqlTypeMapper.GetSqlTypeMappingExists(propType);
         }
 
         public Type TryGetRefEntityType(PropertyInfo property)

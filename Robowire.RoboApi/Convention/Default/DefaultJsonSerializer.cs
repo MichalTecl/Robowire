@@ -37,7 +37,7 @@ namespace Robowire.RoboApi.Convention.Default
             {
                 var queryKey =
                     context.HttpContext.Request.QueryString.AllKeys.FirstOrDefault(
-                        i => i.Equals(parameter.Name, StringComparison.InvariantCultureIgnoreCase));
+                        i => !string.IsNullOrWhiteSpace(i) && i.Equals(parameter.Name, StringComparison.InvariantCultureIgnoreCase));
 
                 if (queryKey != null)
                 {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Robowire.RobOrm.Core;
@@ -52,6 +53,30 @@ namespace RobOrm.UnitTests
             Assert.Equal(nameof(IHouse.Id), referenceInfo.LeftKeyColumnName);
             Assert.Equal(nameof(IUser.WeekendHouseId), referenceInfo.RightKeyColumnName);
             Assert.Equal(typeof(IUser), referenceInfo.RightEntityType);
+        }
+
+        [Fact]
+        public void TestColumnsMapping()
+        {
+            var sut = new SlowDataModelHelper();
+
+            var cols = sut.GetTableDataColumns(typeof(IEttx)).ToList();
+
+            Assert.Equal(5, cols.Count);
+        }
+
+        [Entity]
+        public interface IEttx
+        {
+            int Id { get; }
+
+            Guid GuidCol { get; set; }
+
+            DateTime DtCol { get; set; }
+
+            bool BoolCol { get; set; }
+
+            decimal DecimalCol { get; set; }
         }
 
 

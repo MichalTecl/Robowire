@@ -57,7 +57,7 @@ namespace Robowire.RobOrm.SqlServer
             {
                 foreach (var entityColumnValue in values)
                 {
-                    command.Parameters.AddWithValue($"@{entityColumnValue.ColumnName}", entityColumnValue.Value);
+                    command.Parameters.AddWithValue($"@{entityColumnValue.ColumnName}", entityColumnValue.Value ?? DBNull.Value);
                 }
 
                 var newPk = command.ExecuteScalar();
@@ -86,7 +86,7 @@ namespace Robowire.RobOrm.SqlServer
                     sb.Append("[").Append(values[v].ColumnName).Append("] = @p").Append(v);
 
 
-                    command.Parameters.AddWithValue($"@p{v}", values[v].Value);
+                    command.Parameters.AddWithValue($"@p{v}", values[v].Value ?? DBNull.Value);
                 }
 
                 var pk = entity.GetValues().Single(pkv => pkv.IsPk);
