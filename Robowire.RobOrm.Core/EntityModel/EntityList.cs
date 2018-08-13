@@ -20,7 +20,7 @@ namespace Robowire.RobOrm.Core.EntityModel
 
         public IEntity Find(object primaryKeyValue)
         {
-            return m_items.FirstOrDefault(i => i.PrimaryKeyValue == primaryKeyValue);
+            return m_items.FirstOrDefault(i => primaryKeyValue.Equals(i.PrimaryKeyValue));
         }
 
         public void Add(IEntity entity)

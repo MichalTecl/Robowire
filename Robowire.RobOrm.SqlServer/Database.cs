@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -117,6 +118,16 @@ namespace Robowire.RobOrm.SqlServer
             {
                 cmd.Parameters.AddWithValue("@pk", pk.Value);
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        protected override object ExecuteScalar(string query, Action<DbParameterCollection> setParameters, ITransaction<SqlConnection> transaction)
+        {
+            using (var cmd = new SqlCommand(query, transaction.GetConnection()))
+            {
+                setParameters(cmd.Parameters);
+
+                return cmd.ExecuteScalar();
             }
         }
     }

@@ -55,6 +55,7 @@
     <Compile Include="Core\SetupElementBase.cs" />
     <Compile Include="Core\TypeNameHelper.cs" />
     <Compile Include="IBehavior.cs" />
+    <Compile Include="IRobowireRegistry.cs" />
     <Compile Include="IWithBehavior.cs" />
     <Compile Include="Plugin\DefaultPlugins\DisposablesRegistrationPlugin.cs" />
     <Compile Include="Plugin\Flow\IPluginCollection.cs" />

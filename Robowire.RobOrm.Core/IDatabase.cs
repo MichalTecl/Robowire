@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
 
 using Robowire.RobOrm.Core.Query.Abstraction;
 
@@ -25,5 +27,7 @@ namespace Robowire.RobOrm.Core
         IEnumerable<TTarget> SelectSingleColumn<TSource, TTarget>(IQueryModel<TSource> model) where TSource : class;
 
         string GetQueryText<T>(IQueryModel<T> model, IQueryBuilder<T> builder) where T : class;
+
+        object ExecuteScalar(string query, Action<DbParameterCollection> setParameters);
     }
 }

@@ -18,30 +18,16 @@ namespace RobOrmRealLife
     {
         static void Main(string[] args)
         {
-            var ownerName = "Meriva";
-
             using (var locator = GetLocator())
             {
                 var db = locator.Get<IDatabase>();
 
-                var startDt = DateTime.Now;
 
-                using (var transaction = db.OpenTransaction())
-                {
-                    //var merivyModely = db.SelectFrom<ICarModel>().Where(c => c.Name.Like("%"+ ownerName + "%")).Transform(m => m.Id);
-                    //var merivy = db.SelectFrom<ICar>().Where(c => c.ModelId.InSubquery(merivyModely)).Execute();
-                    
-                    //db.DeleteAll(merivy);
-
-                 
-                    
-                        
-                    transaction.Commit();
-                }
-
+                var auto = db.SelectFrom<IManufacturer>().Join(c => c.Models).Execute().ToList();       
 
                 
-                Console.WriteLine((DateTime.Now - startDt).TotalMilliseconds);
+                
+                
                 Console.ReadLine();
 
             }
@@ -53,7 +39,17 @@ namespace RobOrmRealLife
         {
             var container = new Container();
 
-            RobOrmInitializer.Initialize(container, () => new ConnectionStringProvider(), true, typeof(ICar).Assembly);
+            Action<IContainer> migrator = null;
+
+            container.Setup(c =>
+                {
+                    migrator = RobOrmInitializer.InitializeAndGetMigrator(
+                        c,
+                        () => new ConnectionStringProvider(),
+                        typeof(ICar).Assembly);
+                });
+
+            migrator(container);
 
             return container.GetLocator();
         }

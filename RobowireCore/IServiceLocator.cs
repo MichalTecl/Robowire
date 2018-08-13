@@ -19,5 +19,7 @@ namespace Robowire
         object InstantiateNow(Type type);
 
         T InstantiateNow<T>();
+
+        T InstantiateNow<T>(string assemblyQualifiedTypeName);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 
 using Robowire.RobOrm.Core.EntityModel;
@@ -110,14 +111,25 @@ namespace Robowire.RobOrm.Core
                 transaction.Commit();
             }
         }
-
-
+        
         public void SaveAll<T>(IEnumerable<T> entities) where T : class
         {
             foreach (var entity in entities)
             {
                 Save(entity);
             }
+        }
+
+        public object ExecuteScalar(string query, Action<DbParameterCollection> setParameters)
+        {
+            object result;
+            using (var transaction = m_transactionManager.Open())
+            {
+                result = ExecuteScalar(query, setParameters, transaction);
+                transaction.Commit();
+            }
+
+            return result;
         }
 
         public ITransaction OpenTransaction()
@@ -152,7 +164,7 @@ namespace Robowire.RobOrm.Core
         }
 
         public abstract string GetQueryText<T>(IQueryModel<T> model, IQueryBuilder<T> builder) where T : class;
-
+        
         protected abstract IDataReader ExecuteReader<T>(IQueryModel<T> model, IQueryBuilder<T> builder, ITransaction<TConnection> transaction) where T : class;
 
         protected abstract object InsertEntity(IEntity entity, ITransaction<TConnection> transaction);
@@ -162,5 +174,10 @@ namespace Robowire.RobOrm.Core
         protected abstract object UpsertEntity(IEntity entity, ITransaction<TConnection> transaction);
 
         protected abstract void DeleteEntity(IEntity entity, ITransaction<TConnection> transaction);
+
+        protected abstract object ExecuteScalar(
+            string query,
+            Action<DbParameterCollection> setParameters,
+            ITransaction<TConnection> transaction);
     }
 }

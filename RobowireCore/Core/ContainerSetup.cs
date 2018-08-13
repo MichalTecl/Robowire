@@ -91,6 +91,12 @@ namespace Robowire.Core
 
         public IContainerSetup ScanType(Type type)
         {
+            if (typeof(IRobowireRegistry).IsAssignableFrom(type) && (!type.IsInterface) && (!type.IsAbstract))
+            {
+                var inst = Activator.CreateInstance(type) as IRobowireRegistry;
+                inst?.Setup(this);
+            }
+
             var attributes = type.GetCustomAttributes().OfType<ISelfSetupAttribute>();
 
             foreach (var attribute in attributes)

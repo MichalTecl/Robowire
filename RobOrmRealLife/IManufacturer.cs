@@ -16,5 +16,7 @@ namespace RobOrmRealLife
 
         [NVarchar(255, false)]
         string Name { get; set; }
+
+        IEnumerable<ICarModel> Models { get; }
     }
 }

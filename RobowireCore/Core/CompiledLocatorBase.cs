@@ -88,6 +88,13 @@ namespace Robowire.Core
             return (T)InstantiateNow(typeof(T));
         }
 
+        public T InstantiateNow<T>(string assemblyQualifiedTypeName)
+        {
+            var type = Type.GetType(assemblyQualifiedTypeName);
+
+            return (T)InstantiateNow(type);
+        }
+
         protected abstract IEnumerable GetCollectionItems(Type collectionType);
 
         public abstract IServiceLocator CreateLocatorInstance(
