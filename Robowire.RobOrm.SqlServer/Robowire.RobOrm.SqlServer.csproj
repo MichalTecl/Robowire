@@ -48,6 +48,7 @@
     <Compile Include="ISqlConnectionStringProvider.cs" />
     <Compile Include="Migration\SqlMigrationScriptBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pure\SqlCommandBuilder.cs" />
     <Compile Include="RobOrmInitializer.cs" />
     <Compile Include="SqlQueryRenderer.cs" />
     <Compile Include="Transaction\ChildSqlTransaction.cs" />

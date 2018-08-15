@@ -11,12 +11,19 @@ namespace Robowire.RobOrm.Core.DefaultRules
     {
         public string GetColumnName(PropertyInfo property)
         {
-            if (!IsColumn(property))
+            try
             {
-                return null;
-            }
+                if (!IsColumn(property))
+                {
+                    return null;
+                }
 
-            return property.Name;
+                return property.Name;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to map property column {property.DeclaringType}.{property.Name}", ex);
+            }
         }
 
         public bool IsColumn(PropertyInfo property)

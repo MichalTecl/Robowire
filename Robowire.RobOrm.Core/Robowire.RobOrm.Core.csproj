@@ -90,6 +90,10 @@
     <Compile Include="Migration\Internal\ScriptBuilderProxy.cs" />
     <Compile Include="Migration\ISchemaMigrator.cs" />
     <Compile Include="Migration\SchemaMigrator.cs" />
+    <Compile Include="NonOrm\IExecutor.cs" />
+    <Compile Include="NonOrm\ISqlBuilder.cs" />
+    <Compile Include="NonOrm\ISqlExecutor.cs" />
+    <Compile Include="NotFkAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryExtensions.cs" />
     <Compile Include="Query\Abstraction\IHasBuilder.cs" />

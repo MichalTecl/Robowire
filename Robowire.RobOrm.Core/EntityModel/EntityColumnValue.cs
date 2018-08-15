@@ -12,5 +12,10 @@
             IsPk = isPk;
             Value = value;
         }
+
+        public override string ToString()
+        {
+            return $"{ColumnName}:{Value}";
+        }
     }
 }

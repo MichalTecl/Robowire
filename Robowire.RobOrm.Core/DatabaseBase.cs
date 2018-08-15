@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 
 using Robowire.RobOrm.Core.EntityModel;
+using Robowire.RobOrm.Core.NonOrm;
 using Robowire.RobOrm.Core.Query.Abstraction;
 using Robowire.RobOrm.Core.Query.Building;
 using Robowire.RobOrm.Core.Query.Model;
@@ -11,7 +13,7 @@ using Robowire.RobOrm.Core.Query.Reader;
 
 namespace Robowire.RobOrm.Core
 {
-    public abstract class DatabaseBase<TConnection> : IDatabase
+    public abstract class DatabaseBase<TConnection> : IDatabase, IExecutor
     {
         private readonly IServiceLocator m_locator;
         private readonly IDataModelHelper m_dataModel;
@@ -27,6 +29,14 @@ namespace Robowire.RobOrm.Core
         public T New<T>() where T : class
         {
             return m_locator.Get<T>();
+        }
+
+        public T New<T>(Action<T> init) where T : class
+        {
+            var item = New<T>();
+            init(item);
+
+            return item;
         }
 
         public IQueryBuilder<T> SelectFrom<T>() where T : class
@@ -132,6 +142,21 @@ namespace Robowire.RobOrm.Core
             return result;
         }
 
+        public abstract ISqlBuilder Sql();
+
+        public T Execute<T>(Action<SqlCommand> setupCommand, Func<SqlCommand, T> action)
+        {
+            T result;
+            using (var transaction = m_transactionManager.Open())
+            {
+                result = Execute(setupCommand, action, transaction);
+
+                transaction.Commit();
+            }
+
+            return result;
+        }
+
         public ITransaction OpenTransaction()
         {
             return m_transactionManager.Open();
@@ -179,5 +204,7 @@ namespace Robowire.RobOrm.Core
             string query,
             Action<DbParameterCollection> setParameters,
             ITransaction<TConnection> transaction);
+
+        protected abstract T Execute<T>(Action<SqlCommand> setupCommand, Func<SqlCommand, T> action, ITransaction<TConnection> transaction);
     }
 }

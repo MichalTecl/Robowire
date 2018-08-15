@@ -47,6 +47,7 @@ namespace Robowire.RobOrm.SqlServer.Transaction
         {
             if (m_rolledBack)
             {
+
                 throw new InvalidOperationException("Cannot commit the transaction because some child transaction is uncommited");
             }
 

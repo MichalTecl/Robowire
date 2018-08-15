@@ -7,8 +7,10 @@ using System.Text;
 using Robowire.RobOrm.Core;
 using Robowire.RobOrm.Core.EntityModel;
 using Robowire.RobOrm.Core.Internal;
+using Robowire.RobOrm.Core.NonOrm;
 using Robowire.RobOrm.Core.Query.Abstraction;
 using Robowire.RobOrm.Core.Query.Model;
+using Robowire.RobOrm.SqlServer.Pure;
 
 namespace Robowire.RobOrm.SqlServer
 {
@@ -25,6 +27,11 @@ namespace Robowire.RobOrm.SqlServer
         public override string GetQueryText<T>(IQueryModel<T> model, IQueryBuilder<T> builder) 
         {
             return SqlQueryRenderer.Render(model, builder);
+        }
+
+        public override ISqlBuilder Sql()
+        {
+            return new Pure.SqlCommandBuilder(this);
         }
 
         protected override IDataReader ExecuteReader<T>(IQueryModel<T> model, IQueryBuilder<T> builder, ITransaction<SqlConnection> transaction) 
@@ -128,6 +135,20 @@ namespace Robowire.RobOrm.SqlServer
                 setParameters(cmd.Parameters);
 
                 return cmd.ExecuteScalar();
+            }
+        }
+
+        protected override T Execute<T>(
+            Action<SqlCommand> setupCommand,
+            Func<SqlCommand, T> action,
+            ITransaction<SqlConnection> transaction)
+        {
+            using (var cmd = new SqlCommand())
+            {
+                cmd.Connection = transaction.GetConnection();
+                setupCommand(cmd);
+
+                return action(cmd);
             }
         }
     }

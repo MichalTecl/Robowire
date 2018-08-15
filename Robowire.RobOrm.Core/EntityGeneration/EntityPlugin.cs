@@ -241,24 +241,47 @@ namespace Robowire.RobOrm.Core.EntityGeneration
                     continue;
                 }
 
-                if (string.IsNullOrWhiteSpace(m_setup.EntityNamingConvention.GetColumnName(sourceProperty)))
+                try
                 {
-                    if (m_setup.EntityNamingConvention.TryGetRefEntityType(sourceProperty) == null)
+                    if (string.IsNullOrWhiteSpace(m_setup.EntityNamingConvention.GetColumnName(sourceProperty)))
                     {
-                        ImplementDefaultProperty(entityClass, sourceProperty);
+                        if (m_setup.EntityNamingConvention.TryGetRefEntityType(sourceProperty) == null)
+                        {
+                            ImplementDefaultProperty(entityClass, sourceProperty);
+                        }
+
+                        continue;
+                    }
+                    else
+                    {
+                        if (!sourceProperty.CanWrite)
+                        {
+                            throw new InvalidOperationException(
+                                      $"Property {sourceProperty.DeclaringType?.Name}.{sourceProperty.Name} seems to be a column, but has no setter");
+                        }
+
+                        if (sourceProperty.Name.Length > 2 && sourceProperty.Name.EndsWith("Id") && !Attribute.IsDefined(sourceProperty, typeof(NotFkAttribute)))
+                        {
+                            var typedPropName = sourceProperty.Name.Substring(0, sourceProperty.Name.Length - 2);
+
+                            var typedProp = setupInterfaceType.GetProperty(typedPropName);
+                            if (typedProp == null
+                                || m_setup.EntityNamingConvention.TryGetRefEntityType(typedProp) == null)
+                            {
+                                throw new InvalidOperationException($"Property {sourceProperty.DeclaringType}.{sourceProperty.Name} seems to be a foreign key, but there is not any property {typedPropName} to describe the reference. Add {typedPropName} or mark the property with {typeof(NotFkAttribute)}");
+                            }
+                        }
+
+                        ImplementColumnProperty(entityClass, sourceProperty);
+                       
                     }
                 }
-                else 
+                catch (Exception ex)
                 {
-                    if (!sourceProperty.CanWrite)
-                    {
-                        throw new InvalidOperationException($"Property {sourceProperty.DeclaringType?.Name}.{sourceProperty.Name} seems to be a column, but has no setter");
-                    }
-
-                    ImplementColumnProperty(entityClass, sourceProperty);
-
-                    yield return sourceProperty;
+                    throw new InvalidOperationException($"Failed to map property {sourceProperty.DeclaringType}.{sourceProperty.Name}", ex);
                 }
+
+                yield return sourceProperty;
             }
         }
 
