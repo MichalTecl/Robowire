@@ -39,6 +39,19 @@ namespace Robowire.RobOrm.Core
             return item;
         }
 
+        public T New<T>(T source) where T : class
+        {
+            //TODO compile copy method
+            var item = New<T>();
+
+            foreach (var targetProp in typeof(T).GetProperties().Where(p => p.CanWrite))
+            {
+                targetProp.SetValue(item, targetProp.GetValue(source));
+            }
+
+            return item;
+        }
+
         public IQueryBuilder<T> SelectFrom<T>() where T : class
         {
             var queryBuilder = new QueryBuilder<T>(m_dataModel, this);

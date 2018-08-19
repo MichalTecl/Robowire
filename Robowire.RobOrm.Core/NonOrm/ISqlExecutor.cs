@@ -100,6 +100,8 @@ namespace Robowire.RobOrm.Core.NonOrm
         /// <returns></returns>
         object Scalar();
 
+        T Scalar<T>();
+
         /// <summary>
         /// Executes the command and returns number of affected rows
         /// </summary>

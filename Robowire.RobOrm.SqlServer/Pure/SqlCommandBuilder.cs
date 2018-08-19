@@ -191,7 +191,18 @@ namespace Robowire.RobOrm.SqlServer.Pure
         {
             return Execute(c => c.ExecuteScalar());
         }
-        
+
+        public T Scalar<T>()
+        {
+            var res = Scalar();
+            if (res == null || DBNull.Value.Equals(res) && (Nullable.GetUnderlyingType(typeof(T)) != null || typeof(T).IsClass))
+            {
+                return default(T);
+            }
+
+            return (T)res;
+        }
+
         public int NonQuery()
         {
             return Execute(c => c.ExecuteNonQuery());

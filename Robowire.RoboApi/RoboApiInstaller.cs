@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 using Robowire.RoboApi.Internal;
 
@@ -15,6 +12,7 @@ namespace Robowire.RoboApi
         public void Install(
             ControllerBuilder controllerBuilder,
             IContainer container,
+            Action<RequestContext, IServiceLocator> requestScopeInitializer,
             params Assembly[] controllerAssemblies)
         {
             container.Setup(
@@ -33,7 +31,7 @@ namespace Robowire.RoboApi
                         setup.For<ControllerIndex>().Use<ControllerIndex>();
                     });
 
-            var factory = new RaControllerFactory(container);
+            var factory = new RaControllerFactory(container, requestScopeInitializer);
 
             controllerBuilder?.SetControllerFactory(factory);
         }

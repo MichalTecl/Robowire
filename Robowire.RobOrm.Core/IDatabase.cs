@@ -13,6 +13,8 @@ namespace Robowire.RobOrm.Core
 
         T New<T>(Action<T> init) where T : class;
 
+        T New<T>(T source) where T : class;
+
         IQueryBuilder<T> SelectFrom<T>() where T : class;
 
         IEnumerable<T> Select<T>(IQueryModel<T> query) where T : class;
