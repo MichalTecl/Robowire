@@ -20,7 +20,6 @@ namespace Robowire.RobOrm.SqlServer
             {
                 return () =>
                 {
-                    Console.WriteLine("Creating new connection");
                     return new SqlConnection(m_connectionStringProvider.ConnectionString);
                 };
             }
