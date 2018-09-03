@@ -70,6 +70,11 @@ namespace Robowire.Core
 
         public object InstantiateNow(Type type)
         {
+            if (type == null)
+            {
+                throw new ArgumentException("Provided type is null");
+            }
+
             var ctor =
                 type.GetConstructors()
                     .Where(c => !c.GetParameters().Any(p => p.ParameterType.IsPrimitive))
