@@ -49,7 +49,9 @@
     <Compile Include="ICar.cs" />
     <Compile Include="ICarModel.cs" />
     <Compile Include="ICustomer.cs" />
+    <Compile Include="IEntityBase.cs" />
     <Compile Include="IManufacturer.cs" />
+    <Compile Include="IModelRelated.cs" />
     <Compile Include="IServiceCenter.cs" />
     <Compile Include="IServiceCheck.cs" />
     <Compile Include="Program.cs" />

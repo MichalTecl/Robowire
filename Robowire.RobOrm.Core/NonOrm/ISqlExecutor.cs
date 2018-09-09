@@ -119,5 +119,16 @@ namespace Robowire.RobOrm.Core.NonOrm
         /// </summary>
         /// <returns></returns>
         DataSet DataSet();
+
+        void ReadRows<T1>(Action<T1> rowCallback);
+        void ReadRows<T1, T2>(Action<T1, T2> rowCallback);
+        void ReadRows<T1, T2, T3>(Action<T1, T2, T3> rowCallback);
+        void ReadRows<T1, T2, T3, T4>(Action<T1, T2, T3, T4> rowCallback);
+        void ReadRows<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> rowCallback);
+        void ReadRows<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> rowCallback);
+        void ReadRows<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> rowCallback);
+        void ReadRows<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> rowCallback);
+        void ReadRows<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> rowCallback);
+        void ReadRows<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> rowCallback);
     }
 }

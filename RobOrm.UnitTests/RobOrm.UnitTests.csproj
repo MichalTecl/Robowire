@@ -62,8 +62,10 @@
     <Compile Include="Class1.cs" />
     <Compile Include="DataReaderMock.cs" />
     <Compile Include="DataReaderTests.cs" />
+    <Compile Include="DbStringAttribute.cs" />
     <Compile Include="DotPathHelperTests.cs" />
     <Compile Include="EntityImplementorTests.cs" />
+    <Compile Include="EntityInheritanceTests.cs" />
     <Compile Include="ExpressionEvaluatorTests.cs" />
     <Compile Include="ExpressionHelperTests.cs" />
     <Compile Include="QueryBuilderTests.cs" />

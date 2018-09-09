@@ -40,7 +40,7 @@ namespace Robowire.RobOrm.Core
                 pkProperty = "Id";
             }
 
-            if (markedType.GetProperty(pkProperty) == null)
+            if (ReflectionUtil.GetProperty(markedType, pkProperty) == null)
             {
                 throw new InvalidOperationException($"{markedType.Name} - Primary Key property \"{pkProperty}\" not found");
             }

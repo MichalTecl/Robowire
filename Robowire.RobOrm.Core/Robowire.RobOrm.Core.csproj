@@ -63,12 +63,14 @@
     <Compile Include="EntityModel\EntityHolder.cs" />
     <Compile Include="EntityModel\SaveMethodType.cs" />
     <Compile Include="IDatabase.cs" />
+    <Compile Include="IDatabaseInterceptor.cs" />
     <Compile Include="IDbTypeAttribute.cs" />
     <Compile Include="IMethodMapper.cs" />
     <Compile Include="Internal\DotPathHelper.cs" />
     <Compile Include="Internal\ExpressionsHelper.cs" />
     <Compile Include="Internal\NamingHelper.cs" />
     <Compile Include="Internal\PkHandlingHelper.cs" />
+    <Compile Include="Internal\ReflectionUtil.cs" />
     <Compile Include="Internal\SqlTypeMapper.cs" />
     <Compile Include="IHasParameters.cs" />
     <Compile Include="ITransaction.cs" />

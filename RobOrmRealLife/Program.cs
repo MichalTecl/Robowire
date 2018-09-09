@@ -23,7 +23,7 @@ namespace RobOrmRealLife
                 var db = locator.Get<IDatabase>();
 
 
-                var auto = db.SelectFrom<IManufacturer>().Join(c => c.Models).Execute().ToList();       
+                var auto = db.SelectFrom<ICar>().Join(c => c.Model).Execute().ToList();       
 
                 
                 

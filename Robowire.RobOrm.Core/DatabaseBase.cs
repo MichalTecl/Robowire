@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 
 using Robowire.RobOrm.Core.EntityModel;
+using Robowire.RobOrm.Core.Internal;
 using Robowire.RobOrm.Core.NonOrm;
 using Robowire.RobOrm.Core.Query.Abstraction;
 using Robowire.RobOrm.Core.Query.Building;
@@ -44,7 +45,7 @@ namespace Robowire.RobOrm.Core
             //TODO compile copy method
             var item = New<T>();
 
-            foreach (var targetProp in typeof(T).GetProperties().Where(p => p.CanWrite))
+            foreach (var targetProp in ReflectionUtil.GetAllProperties(typeof(T)).Where(p => p.CanWrite))
             {
                 targetProp.SetValue(item, targetProp.GetValue(source));
             }

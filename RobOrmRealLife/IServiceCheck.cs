@@ -9,10 +9,8 @@ using Robowire.RobOrm.Core;
 namespace RobOrmRealLife
 {
     [Entity]
-    public interface IServiceCheck
+    public interface IServiceCheck : IEntityBase
     {
-        int Id { get; }
-
         IServiceCenter Center { get; }
         int CenterId { get; set; }
 

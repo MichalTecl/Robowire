@@ -78,7 +78,7 @@ namespace Robowire.RobOrm.Core.DefaultRules
             var entityAttribute = Attribute.GetCustomAttribute(entityType, typeof(EntityAttribute)) as EntityAttribute;
             var propertyName = (entityAttribute?.PrimaryKeyProperty) ?? "Id";
 
-            return entityType.GetProperty(propertyName);
+            return ReflectionUtil.GetProperty(entityType, propertyName);
         }
     }
 }

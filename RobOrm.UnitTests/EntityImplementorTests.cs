@@ -167,8 +167,10 @@ namespace RobOrm.UnitTests
         {
             int? Id { get; set; }
 
+            [DbString]
             string FirstName { get; set; }
 
+            [DbString]
             string LastName { get; set; }
         }
 
@@ -187,6 +189,7 @@ namespace RobOrm.UnitTests
         {
             string Id { get; set; }
 
+            [DbString]
             string Prop { get; set; }
         }
 
@@ -194,7 +197,8 @@ namespace RobOrm.UnitTests
         public interface IEntity4
         {
             int? Id { get; }
-
+            
+            [DbString]
             string Prop { get; set; }
         }
 

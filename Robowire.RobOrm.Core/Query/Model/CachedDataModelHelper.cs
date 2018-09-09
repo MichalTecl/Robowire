@@ -33,5 +33,10 @@ namespace Robowire.RobOrm.Core.Query.Model
         {
             return m_source.GetColumnName(columnProperty);
         }
+
+        public bool IsFkDefinedByanotherProperty(Type entityType, PropertyInfo columnProperty)
+        {
+            return m_source.IsFkDefinedByanotherProperty(entityType, columnProperty);
+        }
     }
 }

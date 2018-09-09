@@ -76,13 +76,15 @@ namespace RobOrm.UnitTests
         {
             int Id { get; }
 
+            [DbString]
             string SomeText { get; set; }
 
             int? ChildId { get; set; }
 
             [ForeignKey(nameof(ParentId))]
             IEnumerable<IEntity1> Children { get; }
-
+            
+            [NotFk]
             int? ParentId { get; set; }
 
             bool SomeBool { get; set; }

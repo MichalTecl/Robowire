@@ -258,6 +258,137 @@ namespace Robowire.RobOrm.SqlServer.Pure
         {
             return m_executor.Execute(SetupCommand, action);
         }
-        
+
+        #region ReadRows with callback
+        public void ReadRows<T1>(Action<T1> rowCallback)
+        {
+            ReadRows(row => rowCallback(GetFieldValue<T1>(row, 0)));
+        }
+
+        public void ReadRows<T1, T2>(Action<T1, T2> rowCallback)
+        {
+            ReadRows(row => rowCallback(GetFieldValue<T1>(row, 0), GetFieldValue<T2>(row, 1)));
+        }
+
+        public void ReadRows<T1, T2, T3>(Action<T1, T2, T3> rowCallback)
+        {
+            ReadRows(
+                row => rowCallback(GetFieldValue<T1>(row, 0), GetFieldValue<T2>(row, 1), GetFieldValue<T3>(row, 2)));
+        }
+
+        public void ReadRows<T1, T2, T3, T4>(Action<T1, T2, T3, T4> rowCallback)
+        {
+            ReadRows(
+                row =>
+                    rowCallback(
+                        GetFieldValue<T1>(row, 0),
+                        GetFieldValue<T2>(row, 1),
+                        GetFieldValue<T3>(row, 2),
+                        GetFieldValue<T4>(row, 3)));
+        }
+
+        public void ReadRows<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> rowCallback)
+        {
+            ReadRows(
+                row =>
+                    rowCallback(
+                        GetFieldValue<T1>(row, 0),
+                        GetFieldValue<T2>(row, 1),
+                        GetFieldValue<T3>(row, 2),
+                        GetFieldValue<T4>(row, 3),
+                        GetFieldValue<T5>(row, 4)));
+        }
+
+        public void ReadRows<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> rowCallback)
+        {
+            ReadRows(
+                row =>
+                    rowCallback(
+                        GetFieldValue<T1>(row, 0),
+                        GetFieldValue<T2>(row, 1),
+                        GetFieldValue<T3>(row, 2),
+                        GetFieldValue<T4>(row, 3),
+                        GetFieldValue<T5>(row, 4),
+                        GetFieldValue<T6>(row, 5)));
+        }
+
+        public void ReadRows<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> rowCallback)
+        {
+            ReadRows(
+                row =>
+                    rowCallback(
+                        GetFieldValue<T1>(row, 0),
+                        GetFieldValue<T2>(row, 1),
+                        GetFieldValue<T3>(row, 2),
+                        GetFieldValue<T4>(row, 3),
+                        GetFieldValue<T5>(row, 4),
+                        GetFieldValue<T6>(row, 5),
+                        GetFieldValue<T7>(row, 6)));
+        }
+
+        public void ReadRows<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> rowCallback)
+        {
+            ReadRows(
+                row =>
+                    rowCallback(
+                        GetFieldValue<T1>(row, 0),
+                        GetFieldValue<T2>(row, 1),
+                        GetFieldValue<T3>(row, 2),
+                        GetFieldValue<T4>(row, 3),
+                        GetFieldValue<T5>(row, 4),
+                        GetFieldValue<T6>(row, 5),
+                        GetFieldValue<T7>(row, 6),
+                        GetFieldValue<T8>(row, 7)));
+        }
+
+        public void ReadRows<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> rowCallback)
+        {
+            ReadRows(
+                row =>
+                    rowCallback(
+                        GetFieldValue<T1>(row, 0),
+                        GetFieldValue<T2>(row, 1),
+                        GetFieldValue<T3>(row, 2),
+                        GetFieldValue<T4>(row, 3),
+                        GetFieldValue<T5>(row, 4),
+                        GetFieldValue<T6>(row, 5),
+                        GetFieldValue<T7>(row, 6),
+                        GetFieldValue<T8>(row, 7),
+                        GetFieldValue<T9>(row, 8)));
+        }
+
+        public void ReadRows<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> rowCallback)
+        {
+            ReadRows(
+                row =>
+                    rowCallback(
+                        GetFieldValue<T1>(row, 0),
+                        GetFieldValue<T2>(row, 1),
+                        GetFieldValue<T3>(row, 2),
+                        GetFieldValue<T4>(row, 3),
+                        GetFieldValue<T5>(row, 4),
+                        GetFieldValue<T6>(row, 5),
+                        GetFieldValue<T7>(row, 6),
+                        GetFieldValue<T8>(row, 7),
+                        GetFieldValue<T9>(row, 8),
+                        GetFieldValue<T10>(row, 9)));
+        }
+
+        #endregion
+
+        private static T GetFieldValue<T>(DbDataReader reader, int ordinal)
+        {
+            if (reader.IsDBNull(ordinal))
+            {
+                if (typeof(T).IsValueType && (Nullable.GetUnderlyingType(typeof(T)) == null))
+                {
+                    throw new InvalidOperationException($"Cannot convert NULL value to  {typeof(T)}. Use nullable type");
+                }
+
+                return default(T);
+            }
+
+            return reader.GetFieldValue<T>(ordinal);
+        }
     }
 }

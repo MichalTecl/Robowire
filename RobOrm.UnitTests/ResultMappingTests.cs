@@ -79,6 +79,7 @@ namespace RobOrm.UnitTests
         {
             int? Id { get; }
 
+            [DbString]
             string Text{ get; set; }
 
             int Number { get; set; }

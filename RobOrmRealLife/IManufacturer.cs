@@ -10,10 +10,8 @@ using Robowire.RobOrm.SqlServer.Attributes;
 namespace RobOrmRealLife
 {
     [Entity]
-    public interface IManufacturer
+    public interface IManufacturer : IEntityBase
     {
-        int Id { get; }
-
         [NVarchar(255, false)]
         string Name { get; set; }
 

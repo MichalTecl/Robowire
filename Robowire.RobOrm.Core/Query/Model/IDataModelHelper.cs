@@ -13,5 +13,7 @@ namespace Robowire.RobOrm.Core.Query.Model
         string GetTableName(Type entityType);
 
         string GetColumnName(PropertyInfo columnProperty);
+
+        bool IsFkDefinedByanotherProperty(Type entityType, PropertyInfo columnProperty);
     }
 }

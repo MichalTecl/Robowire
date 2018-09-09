@@ -14,7 +14,7 @@ namespace Robowire.RobOrm.Core.Query.Model
 
         public IEnumerable<PropertyInfo> GetTableDataColumns(Type entityType)
         {
-            foreach (var property in entityType.GetProperties())
+            foreach (var property in ReflectionUtil.GetAllProperties(entityType))
             {
                 if (m_convention.IsColumn(property))
                 {
@@ -25,7 +25,7 @@ namespace Robowire.RobOrm.Core.Query.Model
 
         public IEnumerable<ReferenceInfo> GetReferences(Type entityType)
         {
-            foreach (var property in entityType.GetProperties())
+            foreach (var property in ReflectionUtil.GetAllProperties(entityType))
             {
                 var refType = m_convention.TryGetRefEntityType(property);
                 if (refType == null)
@@ -38,16 +38,23 @@ namespace Robowire.RobOrm.Core.Query.Model
 
                 if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 {
-                    leftKeyColumnName = LocalKeyAttribute.GetLocalKeyName(property, m_convention.GetPrimaryKeyProperty(entityType).Name);
-                    rightKeyColumnName = ForeignKeyAttribute.GetForeignKeyName(property, $"{GetTableName(entityType)}Id");
+                    leftKeyColumnName = LocalKeyAttribute.GetLocalKeyName(
+                        property,
+                        m_convention.GetPrimaryKeyProperty(entityType).Name);
+                    rightKeyColumnName = ForeignKeyAttribute.GetForeignKeyName(
+                        property,
+                        $"{GetTableName(entityType)}Id");
                 }
                 else
                 {
                     leftKeyColumnName = LocalKeyAttribute.GetLocalKeyName(property, $"{property.Name}Id");
-                    rightKeyColumnName = ForeignKeyAttribute.GetForeignKeyName(property, m_convention.GetPrimaryKeyProperty(refType).Name);
+                    rightKeyColumnName = ForeignKeyAttribute.GetForeignKeyName(
+                        property,
+                        m_convention.GetPrimaryKeyProperty(refType).Name);
                 }
 
-                yield return new ReferenceInfo(property.Name, entityType, leftKeyColumnName, null, refType, rightKeyColumnName);
+                yield return
+                    new ReferenceInfo(property.Name, entityType, leftKeyColumnName, null, refType, rightKeyColumnName);
             }
         }
 
@@ -55,10 +62,25 @@ namespace Robowire.RobOrm.Core.Query.Model
         {
             return NamingHelper.GetEntityName(entityType);
         }
-        
+
         public string GetColumnName(PropertyInfo columnProperty)
         {
             return columnProperty.Name;
+        }
+
+        public bool IsFkDefinedByanotherProperty(Type entityType, PropertyInfo columnProperty)
+        {
+            var props = ReflectionUtil.GetAllProperties(entityType);
+
+            foreach (var p in props)
+            {
+                if (p.Name == ForeignKeyAttribute.GetForeignKeyName(p, null))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

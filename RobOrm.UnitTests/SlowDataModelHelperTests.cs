@@ -89,6 +89,7 @@ namespace RobOrm.UnitTests
 
             IHouse House { get; }
             
+            [NotFk]
             int WeekendHouseId { get; set; }
 
             [LocalKey(nameof(WeekendHouseId))]

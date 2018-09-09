@@ -149,7 +149,7 @@ namespace Robowire.RobOrm.Core.EntityGeneration
             EntityBehavior behavior,
             Type entityType)
         {
-            var pkProperty = entityType.GetProperty(behavior.PrimaryKeyProperty);
+            var pkProperty = ReflectionUtil.GetProperty(entityType, behavior.PrimaryKeyProperty);
             if (pkProperty == null)
             {
                 throw new InvalidOperationException($"{entityType.Name} is missing {behavior.PrimaryKeyProperty} property");
@@ -229,7 +229,7 @@ namespace Robowire.RobOrm.Core.EntityGeneration
 
         private IEnumerable<PropertyInfo> ImplementProperties(IClassBuilder entityClass, Type setupInterfaceType, EntityBehavior behavior)
         {
-            foreach (var sourceProperty in setupInterfaceType.GetProperties())
+            foreach (var sourceProperty in ReflectionUtil.GetAllProperties(setupInterfaceType))
             {
                 if (sourceProperty.Name == behavior.PrimaryKeyProperty)
                 {
@@ -264,7 +264,7 @@ namespace Robowire.RobOrm.Core.EntityGeneration
                         {
                             var typedPropName = sourceProperty.Name.Substring(0, sourceProperty.Name.Length - 2);
 
-                            var typedProp = setupInterfaceType.GetProperty(typedPropName);
+                            var typedProp = ReflectionUtil.GetProperty(setupInterfaceType, typedPropName);
                             if (typedProp == null
                                 || m_setup.EntityNamingConvention.TryGetRefEntityType(typedProp) == null)
                             {
@@ -323,7 +323,7 @@ namespace Robowire.RobOrm.Core.EntityGeneration
                 entityClass.HasMethod(nameof(IEntity.OpenProperty)).Returns<IEntitySet>().WithModifier("public");
             var openPropertyNameParam = openPropertyMethod.WithParam<string>("propertyName");
             
-            foreach (var property in entityType.GetProperties())
+            foreach (var property in ReflectionUtil.GetAllProperties(entityType))
             {
                 var foreignEntityType = convention.TryGetRefEntityType(property);
                 if (foreignEntityType == null)
