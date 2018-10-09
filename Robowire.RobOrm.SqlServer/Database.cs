@@ -10,7 +10,6 @@ using Robowire.RobOrm.Core.Internal;
 using Robowire.RobOrm.Core.NonOrm;
 using Robowire.RobOrm.Core.Query.Abstraction;
 using Robowire.RobOrm.Core.Query.Model;
-using Robowire.RobOrm.SqlServer.Pure;
 
 namespace Robowire.RobOrm.SqlServer
 {

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-using Robowire.RobOrm.Core.Query.Filtering;
 using Robowire.RobOrm.Core.Query.Model;
 
 namespace Robowire.RobOrm.Core.Query.Abstraction

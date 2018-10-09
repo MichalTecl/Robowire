@@ -3,8 +3,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Transactions;
 
-using Robowire.RobOrm.Core;
-
 namespace Robowire.RobOrm.SqlServer.Transaction
 {
     internal sealed class SqlTransaction : ISqlTransaction

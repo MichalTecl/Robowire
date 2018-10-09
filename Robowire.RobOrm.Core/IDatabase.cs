@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 
 using Robowire.RobOrm.Core.NonOrm;
 using Robowire.RobOrm.Core.Query.Abstraction;

@@ -2,7 +2,6 @@
 using System.Text;
 
 using Robowire.Common.Expressions;
-using Robowire.RobOrm.Core.Query.Model;
 
 namespace Robowire.RobOrm.Core.Query.Filtering.QuerySegments.Misc
 {
