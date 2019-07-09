@@ -5,6 +5,8 @@ namespace Robowire.RobOrm.SqlServer.Attributes
 {
     public class NVarchar : Attribute, IDbTypeAttribute
     {
+        public const int Max = 0;
+
         public NVarchar(int length, bool nullable)
         {
             IsNullable = nullable;

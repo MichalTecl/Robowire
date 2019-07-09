@@ -20,7 +20,7 @@ namespace Robowire.RoboApi.Convention.Default
             
             string data = null;
 
-            if (typeof(T).IsPrimitive || typeof(T) == typeof(string) || (typeof(T).GetMethod("Parse", new Type[] { typeof(string) }) != null))
+            if (typeof(T).IsPrimitive || (typeof(T) == typeof(string)) || (typeof(T).GetMethod("Parse", new Type[] { typeof(string) }) != null))
             {
                 var key =
                     context.RouteData.Values.Keys.FirstOrDefault(
@@ -74,7 +74,7 @@ namespace Robowire.RoboApi.Convention.Default
 
         public void WriteResult(MethodInfo controllerMethod, RequestContext context, object returnValue, bool isVoid)
         {
-            var data = isVoid ? "ok" : JsonConvert.SerializeObject(returnValue);
+            var data = isVoid ? "{\"ok\":1}" : JsonConvert.SerializeObject(returnValue);
 
             context.HttpContext.Response.Write(data);
         }

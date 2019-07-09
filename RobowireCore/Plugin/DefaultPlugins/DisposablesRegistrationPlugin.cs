@@ -15,7 +15,7 @@ namespace Robowire.Plugin.DefaultPlugins
 
         public bool IsApplicable(IServiceSetupRecord setup)
         {
-            Func<Type, bool> canBeDisposable = t => t == null || typeof(IDisposable).IsAssignableFrom(t);
+            Func<Type, bool> canBeDisposable = t => (t == null) || typeof(IDisposable).IsAssignableFrom(t);
 
             return setup.HasValueFactory || canBeDisposable(setup.ImplementingType) || canBeDisposable(setup.InterfaceType);
         }

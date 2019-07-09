@@ -93,7 +93,7 @@ namespace Robowire.Common.Expressions
                     }
                 }
 
-                return expression.Object == null || Map(expression.Object);
+                return (expression.Object == null) || Map(expression.Object);
             }
 
             protected override bool MapParameterExpression(ParameterExpression expression)

@@ -54,7 +54,7 @@ namespace Robowire.RobOrm.Core.Migration
                         script.CreateColumn(table, columnName, type.ColumnDeclarationTypeText, type.IsNullable, false);
 
                         var references =
-                            relations.Where(r => r.LeftEntityType == entity && r.LeftKeyColumnName == columnName);
+                            relations.Where(r => (r.LeftEntityType == entity) && (r.LeftKeyColumnName == columnName));
 
                         foreach (var relation in references)
                         {

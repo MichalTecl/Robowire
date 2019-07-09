@@ -260,15 +260,15 @@ namespace Robowire.RobOrm.Core.EntityGeneration
                                       $"Property {sourceProperty.DeclaringType?.Name}.{sourceProperty.Name} seems to be a column, but has no setter");
                         }
 
-                        if (sourceProperty.Name.Length > 2 && sourceProperty.Name.EndsWith("Id") && !Attribute.IsDefined(sourceProperty, typeof(NotFkAttribute)))
+                        if ((sourceProperty.Name.Length > 2) && sourceProperty.Name.EndsWith("Id") && !Attribute.IsDefined(sourceProperty, typeof(NotFkAttribute)))
                         {
                             var typedPropName = sourceProperty.Name.Substring(0, sourceProperty.Name.Length - 2);
 
                             var typedProp = ReflectionUtil.GetProperty(setupInterfaceType, typedPropName);
-                            if (typedProp == null
-                                || m_setup.EntityNamingConvention.TryGetRefEntityType(typedProp) == null)
+                            if ((typedProp == null)
+                                || (m_setup.EntityNamingConvention.TryGetRefEntityType(typedProp) == null))
                             {
-                                throw new InvalidOperationException($"Property {sourceProperty.DeclaringType}.{sourceProperty.Name} seems to be a foreign key, but there is not any property {typedPropName} to describe the reference. Add {typedPropName} or mark the property with {typeof(NotFkAttribute)}");
+                                throw new InvalidOperationException($"Property {sourceProperty.DeclaringType}.{sourceProperty.Name} seems to be a foreign key, but there is not any property {typedPropName} of Entity type to describe the reference. Add {typedPropName} or mark the property with {typeof(NotFkAttribute)}");
                             }
                         }
 

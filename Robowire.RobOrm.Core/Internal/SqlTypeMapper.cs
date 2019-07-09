@@ -19,7 +19,7 @@ namespace Robowire.RobOrm.Core.Internal
                 },
                 { typeof(double), "float" },
                 { typeof(int), "int" },
-                { typeof(decimal), "money" },
+                { typeof(decimal), "decimal(19,4)" },
                 { typeof(float), "real" },
                 { typeof(short), "smallint" },
                 { typeof(TimeSpan), "time" },

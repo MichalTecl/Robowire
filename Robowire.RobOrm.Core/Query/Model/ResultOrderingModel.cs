@@ -23,7 +23,7 @@ namespace Robowire.RobOrm.Core.Query.Model
         public static void Render<T>(IEnumerable<ResultOrderingModel> orderBy, StringBuilder sb)
         {
             var olist = orderBy?.ToList();
-            if (olist == null || olist.Count == 0)
+            if ((olist == null) || (olist.Count == 0))
             {
                 return;
             }

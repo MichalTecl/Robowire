@@ -13,7 +13,7 @@ namespace Robowire.Plugin.DefaultPlugins
         public bool IsApplicable(IServiceSetupRecord setup)
         {
             return
-                !(setup.HasValueFactory || setup.ImplementingType == null || !setup.ImplementingType.IsClass
+                !(setup.HasValueFactory || (setup.ImplementingType == null) || !setup.ImplementingType.IsClass
                   || setup.ImplementingType.IsAbstract); 
         }
 

@@ -65,7 +65,7 @@ namespace Robowire.RobOrm.Core.DefaultRules
 
             var result = Attribute.IsDefined(pType, typeof(EntityAttribute)) ? pType : null;
 
-            if (result != null && property.CanWrite)
+            if ((result != null) && property.CanWrite)
             {
                 throw new InvalidOperationException($"Invalid definition of {property.DeclaringType?.Name}.{property.Name}: Entity relation property must be read-only.");
             }

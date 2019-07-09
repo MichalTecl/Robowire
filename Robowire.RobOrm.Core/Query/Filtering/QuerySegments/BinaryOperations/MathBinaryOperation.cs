@@ -41,9 +41,9 @@ namespace Robowire.RobOrm.Core.Query.Filtering.QuerySegments.BinaryOperations
         public void Render(StringBuilder sb)
         {
             var nullRight = m_right as ConstantSegment;
-            if (nullRight != null && nullRight.IsNull
-                && (m_symbol == s_supportedSymbols[ExpressionType.Equal]
-                    || m_symbol == s_supportedSymbols[ExpressionType.NotEqual]))
+            if ((nullRight != null) && nullRight.IsNull
+                && ((m_symbol == s_supportedSymbols[ExpressionType.Equal])
+                    || (m_symbol == s_supportedSymbols[ExpressionType.NotEqual])))
             {
                 RenderNullCheck(sb, m_symbol == s_supportedSymbols[ExpressionType.Equal]);
                 return;

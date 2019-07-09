@@ -46,7 +46,7 @@ namespace Robowire
             {
                 m_compiledLocatorLock.EnterReadLock();
 
-                if (!m_records.Any() && m_parent != null)
+                if (!m_records.Any() && (m_parent != null))
                 {
                     return m_parent.GetLocator();
                 }
@@ -239,7 +239,7 @@ namespace Robowire
                 paramsToResolve.RemoveAt(0);
 
                 var paramDefinition = (setupsStack.FirstOrDefault(p => p.ParameterName == toResolve.Name)
-                                       ?? setupsStack.FirstOrDefault(p => p.ParameterType == toResolve.ParameterType && string.IsNullOrWhiteSpace(p.ParameterName))
+                                       ?? setupsStack.FirstOrDefault(p => (p.ParameterType == toResolve.ParameterType) && string.IsNullOrWhiteSpace(p.ParameterName))
                                        ?? setupsStack.FirstOrDefault(p => toResolve.ParameterType.IsAssignableFrom(p.ParameterType) && string.IsNullOrWhiteSpace(p.ParameterName)))
                                       ?? new CtorParamSetupRecord();
 

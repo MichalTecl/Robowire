@@ -194,7 +194,7 @@ namespace Robowire.RobOrm.SqlServer.Pure
         public T Scalar<T>()
         {
             var res = Scalar();
-            if (res == null || DBNull.Value.Equals(res) && (Nullable.GetUnderlyingType(typeof(T)) != null || typeof(T).IsClass))
+            if ((res == null) || (DBNull.Value.Equals(res) && ((Nullable.GetUnderlyingType(typeof(T)) != null) || typeof(T).IsClass)))
             {
                 return default(T);
             }

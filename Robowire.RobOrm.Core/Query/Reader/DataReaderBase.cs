@@ -41,7 +41,7 @@ namespace Robowire.RobOrm.Core.Query.Reader
         public bool IsNull(string columnName)
         {
             var index = GetColumnOrdinal(columnName);
-            return index < 0 || GetIsNull(index);
+            return (index < 0) || GetIsNull(index);
         }
 
         public bool Read()

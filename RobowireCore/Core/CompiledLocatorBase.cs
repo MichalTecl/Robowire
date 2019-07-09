@@ -40,6 +40,12 @@ namespace Robowire.Core
 
         public object Get(Type t)
         {
+            if (t.IsGenericType && (t.GetGenericTypeDefinition() == typeof(Lazy<>)))
+            {
+                var requestedType = t.GetGenericArguments()[0];
+                return ConstructLazy(requestedType, () => Get(requestedType));
+            }
+
             return InternalGet(t);
         }
 
@@ -98,6 +104,19 @@ namespace Robowire.Core
             return (T)InstantiateNow(type);
         }
 
+        public T InstantiateNow<T>(Type type) where T : class 
+        {
+            var inst = InstantiateNow(type);
+
+            var typedIns = inst as T;
+            if (typedIns == null)
+            {
+                throw new ArgumentException($"Cannot convert {type} to {typeof(T)}");
+            }
+
+            return typedIns;
+        }
+
         protected abstract IEnumerable GetCollectionItems(Type collectionType);
 
         public abstract IServiceLocator CreateLocatorInstance(
@@ -127,6 +146,19 @@ namespace Robowire.Core
             return Parent.Get(t);
         }
 
+        private static object ConstructLazy(Type requestedType, Func<object> factory)
+        {
+            var lazyType = typeof(LazyEx<>).MakeGenericType(requestedType);
+            return lazyType.GetConstructor(new[] { typeof(Func<object>) }).Invoke(new object[] { factory });
+        }
+
+        #region Nested
+
+        private class LazyEx<T> : Lazy<T>
+        {
+            public LazyEx(Func<object> factory):base(() => (T)factory()) {}
+        }
+        #endregion
     }
 
 

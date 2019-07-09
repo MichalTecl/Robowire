@@ -46,7 +46,7 @@ namespace Robowire.Core
                 m_record.ConstructorParameters = new List<CtorParamSetupRecord>();
             }
 
-            var targetRec = m_record.ConstructorParameters.FirstOrDefault(p => p.ParameterType == typeof(T) && (string.IsNullOrWhiteSpace(paramName) || p.ParameterName == paramName));
+            var targetRec = m_record.ConstructorParameters.FirstOrDefault(p => (p.ParameterType == typeof(T)) && (string.IsNullOrWhiteSpace(paramName) || (p.ParameterName == paramName)));
             if (targetRec == null)
             {
                 targetRec = new CtorParamSetupRecord();

@@ -34,7 +34,7 @@ namespace Robowire.RoboApi.Convention.Default
 
             foreach (var method in controllerType.GetMethods())
             {
-                if (method.DeclaringType != controllerType)
+                if ((method.DeclaringType != controllerType) && (!Attribute.IsDefined(method, typeof(CanBeInheritedAttribute))))
                 {
                     continue;
                 }
@@ -214,7 +214,14 @@ namespace Robowire.RoboApi.Convention.Default
 
         private Type GetResultWriterType(MethodInfo method)
         {
-            return typeof(DefaultJsonSerializer);
+            if (Attribute.IsDefined(method, typeof(RawStringAttribute)))
+            {
+                return typeof(RawStringResultWriter);
+            }
+            else
+            {
+                return typeof(DefaultJsonSerializer);
+            }
         }
 
         protected virtual Type GetParameterReaderType(ParameterInfo parameter)

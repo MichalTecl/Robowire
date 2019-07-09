@@ -9,7 +9,7 @@ namespace Robowire.RobOrm.Core.Internal
             var entityName = entityType.Name;
             if (entityType.IsInterface
                 && entityName.StartsWith("I")
-                && entityName.Length > 2
+                && (entityName.Length > 2)
                 && char.IsUpper(entityName[1]))
             {
                 entityName = entityName.Substring(1);

@@ -20,8 +20,8 @@ namespace Robowire.Plugin.DefaultPlugins
         public bool IsApplicable(IServiceSetupRecord setup)
         {
 
-            return (setup.InterfaceType != null && CollectionType.IsAssignableFrom(setup.InterfaceType))
-                   || (setup.ImplementingType != null && CollectionType.IsAssignableFrom(setup.ImplementingType));
+            return ((setup.InterfaceType != null) && CollectionType.IsAssignableFrom(setup.InterfaceType))
+                   || ((setup.ImplementingType != null) && CollectionType.IsAssignableFrom(setup.ImplementingType));
         }
         
         public INamedReference GenerateFactoryMethod(

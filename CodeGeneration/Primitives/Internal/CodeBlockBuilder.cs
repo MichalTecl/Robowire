@@ -134,7 +134,7 @@ namespace CodeGeneration.Primitives.Internal
         {
             Write(targetObject).Write(".").Write(methodName);
 
-            if (genericArguments != null && genericArguments.Length > 0)
+            if ((genericArguments != null) && (genericArguments.Length > 0))
             {
                 Write("<");
 

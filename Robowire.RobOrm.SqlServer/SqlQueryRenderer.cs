@@ -13,7 +13,15 @@ namespace Robowire.RobOrm.SqlServer
         {
             var sb = new StringBuilder();
 
+            var takeRendered = false;
+
             sb.Append("SELECT ");
+
+            if ((query.Skip == null) && (query.Take != null))
+            {
+                sb.Append($"TOP {query.Take} ");
+                takeRendered = true;
+            }
 
             var firstColumn = true;
 
@@ -46,14 +54,18 @@ namespace Robowire.RobOrm.SqlServer
 
             ResultOrderingModel.Render<T>(query.OrderBy, sb);
 
-            if (query.Skip != null)
+            
+            if(!takeRendered)
             {
-                sb.AppendLine($"OFFSET {query.Skip} ROWS");
-            }
+                if (query.Skip != null)
+                {
+                    sb.AppendLine($"OFFSET {query.Skip} ROWS");
+                }
 
-            if (query.Take != null)
-            {
-                sb.AppendLine($"FETCH NEXT {query.Take} ROWS ONLY");
+                if (query.Take != null)
+                {
+                    sb.AppendLine($"FETCH NEXT {query.Take} ROWS ONLY");
+                }
             }
 
             return sb.ToString();

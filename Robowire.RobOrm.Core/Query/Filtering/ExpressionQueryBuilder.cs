@@ -21,7 +21,7 @@ namespace Robowire.RobOrm.Core.Query.Filtering
 
         public override IQuerySegment Map(Expression expression)
         {
-            if (!ExpressionEvaluator.IsSelfEvaluable(expression) || expression.NodeType == ExpressionType.Lambda)
+            if (!ExpressionEvaluator.IsSelfEvaluable(expression) || (expression.NodeType == ExpressionType.Lambda))
             {
                 return base.Map(expression);
             }

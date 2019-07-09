@@ -11,13 +11,15 @@ namespace Robowire.RoboApi
         private readonly string m_controllerName;
         private readonly Type m_proxyBuilderType;
         private readonly Type m_callBuilderType;
-
+        
         public ControllerAttribute(string controllerName, Type proxyBuilderType = null, Type callBuilderType = null)
         {
             m_controllerName = controllerName;
             m_proxyBuilderType = proxyBuilderType ?? typeof(ControllerProxyBuilder);
             m_callBuilderType = callBuilderType ?? typeof(DefaultCallBuilder);
         }
+
+        public string Name => m_controllerName;
 
         public void Setup(Type markedType, IContainerSetup setup)
         {

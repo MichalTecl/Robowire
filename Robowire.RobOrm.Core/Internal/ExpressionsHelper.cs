@@ -38,7 +38,7 @@ namespace Robowire.RobOrm.Core.Internal
 
         public static bool IsEachMethod(MethodInfo method)
         {
-            return method.DeclaringType == EachMethod.DeclaringType && method.Name == EachMethod.Name;
+            return (method.DeclaringType == EachMethod.DeclaringType) && (method.Name == EachMethod.Name);
         }
 
         public static Expression<Func<T, bool>> CombineConditions<T>(Expression<Func<T, bool>> filter1, Expression<Func<T, bool>> filter2)
