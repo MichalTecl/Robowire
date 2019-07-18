@@ -106,6 +106,20 @@ namespace Robowire.RobOrm.Core
             }
         }
 
+        public void DeleteFrom<T>(Action<IQueryBuilder<T>> where) where T : class
+        {
+            var qry = SelectFrom<T>();
+            where(qry);
+
+            var lst = qry.Execute().ToList();
+            if (!lst.Any())
+            {
+                return;
+            }
+
+            DeleteAll(lst);
+        }
+
         public void Save<T>(T entity) where T : class
         {
             var typedEntity = entity as IEntity;

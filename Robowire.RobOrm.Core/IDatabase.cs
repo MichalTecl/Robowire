@@ -22,6 +22,8 @@ namespace Robowire.RobOrm.Core
 
         void DeleteAll<T>(IEnumerable<T> entities) where T : class;
 
+        void DeleteFrom<T>(Action<IQueryBuilder<T>> where) where T : class;
+
         void Save<T>(T entity) where T : class;
 
         void SaveAll<T>(IEnumerable<T> entities) where T : class;
