@@ -84,6 +84,12 @@ namespace Robowire.RobOrm.Core
 
         public void Delete<T>(T entity) where T : class
         {
+            if (entity is IAdapter<T> adapter)
+            {
+                Delete<T>(adapter.Adaptee);
+                return;
+            }
+
             var typedEntity = entity as IEntity;
             if (typedEntity == null)
             {
@@ -122,6 +128,12 @@ namespace Robowire.RobOrm.Core
 
         public void Save<T>(T entity) where T : class
         {
+            if (entity is IAdapter<T> adapter)
+            {
+                Save<T>(adapter.Adaptee);
+                return;
+            }
+
             var typedEntity = entity as IEntity;
             if (typedEntity == null)
             {

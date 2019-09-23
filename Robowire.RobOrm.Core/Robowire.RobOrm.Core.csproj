@@ -61,6 +61,7 @@
     <Compile Include="EntityModel\IEntitySet.cs" />
     <Compile Include="EntityModel\EntityHolder.cs" />
     <Compile Include="EntityModel\SaveMethodType.cs" />
+    <Compile Include="IAdapter.cs" />
     <Compile Include="IDatabase.cs" />
     <Compile Include="IDatabaseInterceptor.cs" />
     <Compile Include="IDbTypeAttribute.cs" />
