@@ -13,7 +13,7 @@ namespace Robowire.RobOrm.SqlServer
 {
     public static class RobOrmInitializer
     {
-        public static Action<IContainer> InitializeAndGetMigrator(
+        public static Action<IContainer, MigrationCustomizer> InitializeAndGetMigrator(
             IContainerSetup s,
             Func<ISqlConnectionStringProvider> connectionStringProviderFactory,
             params Assembly[] entitiesOrigin)
@@ -31,11 +31,16 @@ namespace Robowire.RobOrm.SqlServer
                 s.ScanAssembly(assembly);
             }
 
-            Action<IContainer> migratorFunc = (container) =>
+            Action<IContainer, MigrationCustomizer> migratorFunc = (container, customizer) =>
                 {
                     var sqlScriptGenerator = new SqlMigrationScriptBuilder();
                     var hashBuilder = new MigrationHashBuilder();
                     var proxy = new ScriptBuilderProxy(hashBuilder, sqlScriptGenerator);
+
+                    if (customizer != null)
+                    {
+                        proxy.AddCustomScript(customizer.BeforeMigrationScript, customizer.AfterMigrationScript);
+                    }
 
                     using (var locator = container.GetLocator())
                     {

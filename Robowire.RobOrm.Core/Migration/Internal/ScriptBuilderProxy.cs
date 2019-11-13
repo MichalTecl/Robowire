@@ -38,5 +38,13 @@ namespace Robowire.RobOrm.Core.Migration.Internal
                 b.CreateForeignKey(referringTableName, referringColumnName, referredTableName, referredColumnName);
             }
         }
+
+        public void AddCustomScript(string beforeMigration, string afterMigration)
+        {
+            foreach (var migrationScriptBuilder in m_builders)
+            {
+                migrationScriptBuilder.AddCustomScript(beforeMigration, afterMigration);
+            }
+        }
     }
 }

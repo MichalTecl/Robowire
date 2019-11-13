@@ -18,5 +18,7 @@ namespace Robowire.RobOrm.Core.Migration
             string referringColumnName,
             string referredTableName,
             string referredColumnName);
+
+        void AddCustomScript(string beforeMigration, string afterMigration);
     }
 }

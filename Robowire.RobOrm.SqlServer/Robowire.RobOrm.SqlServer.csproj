@@ -49,6 +49,7 @@
     <Compile Include="Database.cs" />
     <Compile Include="HierarchicSqlDataReader.cs" />
     <Compile Include="ISqlConnectionStringProvider.cs" />
+    <Compile Include="Migration\MigrationCustomizer.cs" />
     <Compile Include="Migration\SqlMigrationScriptBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pure\SqlCommandBuilder.cs" />
