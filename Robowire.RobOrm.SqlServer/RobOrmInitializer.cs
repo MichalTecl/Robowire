@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Reflection;
-
+using System.Web;
 using Robowire.RobOrm.Core;
 using Robowire.RobOrm.Core.DefaultRules;
 using Robowire.RobOrm.Core.Migration;
@@ -52,7 +52,7 @@ namespace Robowire.RobOrm.SqlServer
 
                         var connectionBuilder = locator.Get<ITransactionManager<SqlConnection>>();
 
-                        using (var connection = connectionBuilder.Open())
+                        using (var connection = connectionBuilder.Open(false))
                         {
                             using (var command = new SqlCommand(script, connection.GetConnection()))
                             {
@@ -61,7 +61,11 @@ namespace Robowire.RobOrm.SqlServer
 
                             connection.Commit();
                         }
-
+                        
+                        if (!string.IsNullOrWhiteSpace(customizer.ScriptsRoot))
+                        {
+                            ScriptsMigrator.RunScripts(connectionBuilder, customizer.ScriptsRoot);
+                        }
                     }
                 };
 

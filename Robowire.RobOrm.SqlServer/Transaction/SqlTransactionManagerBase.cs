@@ -12,16 +12,28 @@ namespace Robowire.RobOrm.SqlServer.Transaction
 
         protected abstract Func<SqlConnection> ConnectionFactory { get; }
 
-        public ITransaction<SqlConnection> Open()
+        public ITransaction<SqlConnection> Open(bool childOnly)
         {
             var parent = m_threadTransaction.Value;
 
-            var child = parent == null ? (ISqlTransaction)new SqlTransaction(ConnectionFactory, this) : new ChildSqlTransaction(parent, this);
+            ISqlTransaction child = null; 
+            //parent == null ? (ISqlTransaction)new SqlTransaction(ConnectionFactory, this) : new ChildSqlTransaction(parent, this);
 
+            if (parent != null)
+            {
+                child = new ChildSqlTransaction(parent, this);
+            }
+            else
+            {
+                child = new SqlTransaction(ConnectionFactory, this, childOnly);
+            }
+            
             m_threadTransaction.Value = child;
 
             return child;
         }
+
+        public abstract SqlConnection OpenUnmanagedConnection();
 
         public void RemoveCurrentTransaction()
         {

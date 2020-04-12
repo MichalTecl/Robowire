@@ -14,6 +14,7 @@ namespace Robowire.RobOrm.SqlServer.Pure
         private readonly List<SqlParameter> m_parameters = new List<SqlParameter>();
 
         private readonly List<Action<SqlParameterCollection>> m_paramsCallbacks = new List<Action<SqlParameterCollection>>();
+        private readonly List<Action<SqlCommand>> m_commandSetup = new List<Action<SqlCommand>>();
         private string m_commandText;
         private CommandType m_commandType;
 
@@ -139,6 +140,12 @@ namespace Robowire.RobOrm.SqlServer.Pure
             return WithStructuredParam(parameterName, dataTypeName, table);
         }
 
+        public ISqlExecutor SetupCommand(Action<SqlCommand> setupCommand)
+        {
+            m_commandSetup.Add(setupCommand);
+            return this;
+        }
+
         public void Read(Action<DbDataReader> readerAction)
         {
             Execute<object>(
@@ -244,6 +251,11 @@ namespace Robowire.RobOrm.SqlServer.Pure
 
             command.CommandType = m_commandType;
             command.CommandText = m_commandText;
+
+            foreach (var cs in m_commandSetup)
+            {
+                cs.Invoke(command);
+            }
 
             command.Parameters.AddRange(m_parameters.ToArray());
 

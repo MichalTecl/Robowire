@@ -2,6 +2,8 @@
 {
     public interface ITransactionManager<TConnection>
     {
-        ITransaction<TConnection> Open();
+        ITransaction<TConnection> Open(bool childOnly);
+
+        TConnection OpenUnmanagedConnection();
     }
 }

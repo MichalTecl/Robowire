@@ -15,17 +15,18 @@ namespace Robowire.RobOrm.SqlServer.Transaction
         private readonly TransactionScope m_scope;
         private readonly SqlTransactionManagerBase m_owner;
 
-        public SqlTransaction(Func<SqlConnection> connectionFactory, SqlTransactionManagerBase owner)
+        public SqlTransaction(Func<SqlConnection> connectionFactory, SqlTransactionManagerBase owner, bool withoutScope)
         {
             m_connectionFactory = connectionFactory;
             m_owner = owner;
-            m_scope = new TransactionScope();
+
+            m_scope = withoutScope ? null : new TransactionScope();
         }
 
         public void Dispose()
         {
             m_connection?.Dispose();
-            m_scope.Dispose();
+            m_scope?.Dispose();
 
             m_owner.RemoveCurrentTransaction();
         }
@@ -49,7 +50,7 @@ namespace Robowire.RobOrm.SqlServer.Transaction
                 throw new InvalidOperationException("Cannot commit the transaction because some child transaction is uncommited");
             }
 
-            m_scope.Complete();
+            m_scope?.Complete();
         }
 
         public ISqlTransaction Parent => null;

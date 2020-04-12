@@ -24,5 +24,10 @@ namespace Robowire.RobOrm.SqlServer
                 };
             }
         }
+
+        public override SqlConnection OpenUnmanagedConnection()
+        {
+            return ConnectionFactory();
+        }
     }
 }

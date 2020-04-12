@@ -62,7 +62,7 @@ namespace Robowire.RobOrm.Core
         public IEnumerable<T> Select<T>(IQueryModel<T> query) where T : class
         {
             List<T> result;
-            using (var transaction = m_transactionManager.Open())
+            using (var transaction = m_transactionManager.Open(true))
             {
                 var hasBuilder = query as IHasBuilder<T>;
                 if (hasBuilder == null)
@@ -96,7 +96,7 @@ namespace Robowire.RobOrm.Core
                 throw new InvalidOperationException($"Cannot save {entity} - it should implement {typeof(IEntity)} interface");
             }
 
-            using (var transaction = m_transactionManager.Open())
+            using (var transaction = m_transactionManager.Open(true))
             {
                 DeleteEntity(typedEntity, transaction);
 
@@ -142,7 +142,7 @@ namespace Robowire.RobOrm.Core
             
             var mode = typedEntity.GetSaveMethodType();
 
-            using (var transaction = m_transactionManager.Open())
+            using (var transaction = m_transactionManager.Open(true))
             {
                 switch (mode)
                 {
@@ -173,7 +173,7 @@ namespace Robowire.RobOrm.Core
         public object ExecuteScalar(string query, Action<DbParameterCollection> setParameters)
         {
             object result;
-            using (var transaction = m_transactionManager.Open())
+            using (var transaction = m_transactionManager.Open(true))
             {
                 result = ExecuteScalar(query, setParameters, transaction);
                 transaction.Commit();
@@ -187,7 +187,7 @@ namespace Robowire.RobOrm.Core
         public T Execute<T>(Action<SqlCommand> setupCommand, Func<SqlCommand, T> action)
         {
             T result;
-            using (var transaction = m_transactionManager.Open())
+            using (var transaction = m_transactionManager.Open(true))
             {
                 result = Execute(setupCommand, action, transaction);
 
@@ -199,13 +199,13 @@ namespace Robowire.RobOrm.Core
 
         public ITransaction OpenTransaction()
         {
-            return m_transactionManager.Open();
+            return m_transactionManager.Open(false);
         }
 
         public IEnumerable<TTarget> SelectSingleColumn<TSource, TTarget>(IQueryModel<TSource> query) where TSource : class
         {
             List<TTarget> result = new List<TTarget>();
-            using (var transaction = m_transactionManager.Open())
+            using (var transaction = m_transactionManager.Open(true))
             {
                 var hasBuilder = query as IHasBuilder<TSource>;
                 if (hasBuilder == null)

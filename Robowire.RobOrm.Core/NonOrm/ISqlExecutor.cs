@@ -64,6 +64,8 @@ namespace Robowire.RobOrm.Core.NonOrm
             IEnumerable<T> collection,
             IEnumerable<string> dataTypeAttributes,
             Func<T, object[]> rowGenerator);
+
+        ISqlExecutor SetupCommand(Action<SqlCommand> setupCommand);
         
         /// <summary>
         /// Creates a DataReader and executes readerAction with reference to it. Iteration over result rows should be done in readerAction
@@ -118,7 +120,7 @@ namespace Robowire.RobOrm.Core.NonOrm
         /// </summary>
         /// <returns></returns>
         DataSet DataSet();
-
+        
         void ReadRows<T1>(Action<T1> rowCallback);
         void ReadRows<T1, T2>(Action<T1, T2> rowCallback);
         void ReadRows<T1, T2, T3>(Action<T1, T2, T3> rowCallback);
