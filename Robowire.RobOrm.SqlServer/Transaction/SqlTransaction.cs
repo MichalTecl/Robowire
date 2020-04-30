@@ -25,10 +25,23 @@ namespace Robowire.RobOrm.SqlServer.Transaction
 
         public void Dispose()
         {
-            m_connection?.Dispose();
-            m_scope?.Dispose();
-
-            m_owner.RemoveCurrentTransaction();
+            try
+            {
+                m_connection?.Dispose();
+            }
+            catch{;}
+            finally
+            {
+                try
+                {
+                    m_scope?.Dispose();
+                }
+                catch{;}
+                finally
+                {
+                    m_owner.RemoveCurrentTransaction();
+                }
+            }
         }
 
         public SqlConnection GetConnection()
