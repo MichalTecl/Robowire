@@ -20,7 +20,7 @@ namespace Robowire.RobOrm.SqlServer.Transaction
             m_connectionFactory = connectionFactory;
             m_owner = owner;
 
-            m_scope = withoutScope ? null : new TransactionScope();
+            m_scope = withoutScope ? null : CreateTransactionScope();
         }
 
         public void Dispose()
@@ -71,6 +71,18 @@ namespace Robowire.RobOrm.SqlServer.Transaction
         public void Rollback()
         {
             m_rolledBack = true;
+        }
+
+        private TransactionScope CreateTransactionScope()
+        {
+            var options = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted
+            };
+
+            return new TransactionScope(asyncFlowOption: TransactionScopeAsyncFlowOption.Enabled,
+                transactionOptions: options,
+                scopeOption: TransactionScopeOption.Required);
         }
     }
 }

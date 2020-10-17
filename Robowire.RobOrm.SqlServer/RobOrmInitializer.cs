@@ -56,6 +56,7 @@ namespace Robowire.RobOrm.SqlServer
                         {
                             using (var command = new SqlCommand(script, connection.GetConnection()))
                             {
+                                command.CommandTimeout = 1000000;
                                 command.ExecuteNonQuery();
                             }
 
